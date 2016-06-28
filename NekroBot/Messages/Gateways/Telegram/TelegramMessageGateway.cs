@@ -10,6 +10,8 @@
     using global::Telegram.Bot;
     using global::Telegram.Bot.Types;
 
+    using State;
+
     using Newtonsoft.Json;
 
     internal class TelegramMessageGateway : IMessageGateway
@@ -20,14 +22,17 @@
 
         private readonly Formatter formatter;
 
+        private readonly ITelegramState state;
+
         private int offset;
 
         private long chatId;
 
-        public TelegramMessageGateway(string apiKey, Formatter formatter, MessageGatewayCapabilities capabilities)
+        public TelegramMessageGateway(string apiKey, Formatter formatter, MessageGatewayCapabilities capabilities, ITelegramState state)
         {
             this.formatter = formatter;
             Capabilities = capabilities;
+            this.state = state;
             this.api = new Api(apiKey);
         }
 
@@ -68,15 +73,27 @@
 
             Log.Trace(m => m($"Из {telegramUpdates.Length} обрабатывается {updates.Length} обновлений"));
 
-            if (this.chatId == default(int))
+            if (this.chatId == default(long))
             {
-                var updateToChat = filteredUpdates.FirstOrDefault();
+                var savedChatId = this.state.GetChat();
 
-                if (updateToChat != null)
+                if (savedChatId != default(long))
                 {
-                    this.chatId = updateToChat.Message.Chat.Id;
+                    this.chatId = savedChatId;
+                    Log.Debug(m => m($"Идентификатор чата установлен равным {this.chatId} и был ранее сохранён в БД"));
+                }
+                else
+                {
+                    var updateToChat = filteredUpdates.FirstOrDefault();
 
-                    Log.Debug(m => m($"Идентификатор чата установлен равным {this.chatId}"));
+                    if (updateToChat != null)
+                    {
+                        this.chatId = updateToChat.Message.Chat.Id;
+
+                        this.state.SaveChat(this.chatId);
+
+                        Log.Debug(m => m($"Идентификатор чата установлен равным {this.chatId} и сохранён в БД"));
+                    }
                 }
             }
 

@@ -133,10 +133,12 @@
     <Compile Include="Configuration\ReminderElement.cs" />
     <Compile Include="Configuration\ReminderSection.cs" />
     <Compile Include="Configuration\ReminderSettingsCollection.cs" />
+    <Compile Include="Data\DataComponent.cs" />
     <Compile Include="Data\TelegramDataContext.cs" />
     <Compile Include="Data\TelegramState.cs" />
     <Compile Include="DI\BotModule.cs" />
     <Compile Include="DI\ConfigHelper.cs" />
+    <Compile Include="DI\DataModule.cs" />
     <Compile Include="DI\MessageModule.cs" />
     <Compile Include="DI\RemindersModule.cs" />
     <Compile Include="IBotComponent.cs" />
@@ -167,6 +169,7 @@
     <Compile Include="Reminders\IReminderAction.cs" />
     <Compile Include="Reminders\Schedule.cs" />
     <Compile Include="Reminders\ScheduledItem.cs" />
+    <Compile Include="State\ITelegramState.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -185,18 +188,8 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Data\NekroDb.mdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <Content Include="Data\NekroDb.mdf" />
     <Content Include="Data\NekroDb_log.ldf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <DependentUpon>NekroDb.mdf</DependentUpon>
-    </Content>
-    <Content Include="NekroDb.mdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="NekroDb_log.ldf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <DependentUpon>NekroDb.mdf</DependentUpon>
     </Content>
   </ItemGroup>

@@ -11,10 +11,12 @@
     using Autofac;
     using Autofac.Core;
 
+    using NekroBot.Data;
     using NekroBot.Messages;
     using NekroBot.Messages.Gateways;
     using NekroBot.Messages.Gateways.Ipb;
     using NekroBot.Messages.Gateways.Telegram;
+    using NekroBot.State;
 
     public class MessageModule : Module
     {
@@ -48,10 +50,14 @@
             builder.RegisterType<Formatter>()
                 .SingleInstance();
 
+            builder.RegisterType<TelegramDataContext>()
+                .As<ITelegramState>()
+                .SingleInstance();
+
             var telegramCfg = (IDictionary)ConfigurationManager.GetSection("messaging/telegram");
             var telegramCapabilitiesCfg = (IDictionary)ConfigurationManager.GetSection("messaging/capabilities/telegram");
 
-            builder.Register(c => new TelegramMessageGateway(ConfigHelper.GetValueOrDefault<string>(telegramCfg, "api-key"), c.Resolve<Formatter>(), GetCapabilities(telegramCapabilitiesCfg)))
+            builder.Register(c => new TelegramMessageGateway(ConfigHelper.GetValueOrDefault<string>(telegramCfg, "api-key"), c.Resolve<Formatter>(), GetCapabilities(telegramCapabilitiesCfg), c.Resolve<ITelegramState>()))
                 .As<IMessageGateway>()
                 .SingleInstance();
 
