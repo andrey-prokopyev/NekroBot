@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -13,10 +14,11 @@
 
         public string Name { get; } = "TestMessageGateway";
 
+        public MessageGatewayCapabilities Capabilities { get; } = MessageGatewayCapabilities.SendMessage;
+
         public IEnumerable<MessageUpdate> GetMessageUpdates()
         {
-            //yield return new MessageUpdate { Sender = "TestSender", Source = Name, Text = $"This is Test, and now is '{DateTime.Now.ToString(CultureInfo.InvariantCulture)}'" };
-            return Enumerable.Empty<MessageUpdate>();
+            yield return new MessageUpdate { Sender = "TestSender", Source = Name, Text = $"This is Test, and now is '{DateTime.Now.ToString(CultureInfo.InvariantCulture)}'" };
         }
 
         public Task Send(MessageUpdate messageUpdate)

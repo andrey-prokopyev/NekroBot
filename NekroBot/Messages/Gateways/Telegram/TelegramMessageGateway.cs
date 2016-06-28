@@ -24,13 +24,16 @@
 
         private long chatId;
 
-        public TelegramMessageGateway(string apiKey, Formatter formatter)
+        public TelegramMessageGateway(string apiKey, Formatter formatter, MessageGatewayCapabilities capabilities)
         {
             this.formatter = formatter;
+            Capabilities = capabilities;
             this.api = new Api(apiKey);
         }
 
         public string Name { get; } = "Telegram";
+
+        public MessageGatewayCapabilities Capabilities { get; }
 
         public IEnumerable<MessageUpdate> GetMessageUpdates()
         {

@@ -10,5 +10,7 @@
         Task Send(MessageUpdate messageUpdate);
 
         string Name { get; }
+
+        MessageGatewayCapabilities Capabilities { get; }
     }
 }

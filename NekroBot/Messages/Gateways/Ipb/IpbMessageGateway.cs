@@ -25,6 +25,10 @@
 
         private readonly Formatter formatter;
 
+        private readonly string userName;
+
+        private readonly string password;
+
         private readonly HttpClient client;
 
         private readonly CookieContainer cookieContainer;
@@ -35,16 +39,13 @@
 
         private int lastChatId;
 
-        private readonly string userName;
-
-        private readonly string password;
-
-        public IpbMessageGateway(string origin, string userName, string password, Formatter formatter)
+        public IpbMessageGateway(string origin, string userName, string password, Formatter formatter, MessageGatewayCapabilities capabilities)
         {
             this.origin = new Uri(origin);
             this.userName = userName;
             this.password = password;
             this.formatter = formatter;
+            Capabilities = capabilities;
 
             this.cookieContainer = new CookieContainer();
             WebRequestHandler handler = new WebRequestHandler { UseCookies = true, CachePolicy = new HttpRequestCachePolicy(HttpCacheAgeControl.MaxAge, TimeSpan.Zero) };
@@ -179,6 +180,8 @@
         }
 
         public string Name { get; } = "IPB";
+
+        public MessageGatewayCapabilities Capabilities { get; }
 
         private async Task EnsureAuth()
         {

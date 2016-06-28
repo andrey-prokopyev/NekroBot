@@ -31,7 +31,7 @@
                     return;
                 }
 
-                var targets = this.gateways.Where(g => g.Name != messageUpdate.Source);
+                var targets = this.gateways.Where(g => g.Capabilities.HasFlag(MessageGatewayCapabilities.SendMessage) && g.Name != messageUpdate.Source);
 
                 var sendTasks = targets.Select(t => t.Send(messageUpdate));
 

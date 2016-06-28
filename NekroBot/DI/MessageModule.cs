@@ -49,14 +49,16 @@
                 .SingleInstance();
 
             var telegramCfg = (IDictionary)ConfigurationManager.GetSection("messaging/telegram");
+            var telegramCapabilitiesCfg = (IDictionary)ConfigurationManager.GetSection("messaging/capabilities/telegram");
 
-            builder.Register(c => new TelegramMessageGateway(ConfigHelper.GetValueOrDefault<string>(telegramCfg, "api-key"), c.Resolve<Formatter>()))
+            builder.Register(c => new TelegramMessageGateway(ConfigHelper.GetValueOrDefault<string>(telegramCfg, "api-key"), c.Resolve<Formatter>(), GetCapabilities(telegramCapabilitiesCfg)))
                 .As<IMessageGateway>()
                 .SingleInstance();
 
             var ipbCfg = (IDictionary)ConfigurationManager.GetSection("messaging/ipb");
+            var ipbCapabilitiesCfg = (IDictionary)ConfigurationManager.GetSection("messaging/capabilities/ipb");
 
-            builder.Register(c => new IpbMessageGateway(ConfigHelper.GetValueOrDefault(ipbCfg, "origin", "http://ipb.local"), ConfigHelper.GetValueOrDefault(ipbCfg, "user", "nbot"), ConfigHelper.GetValueOrDefault<string>(ipbCfg, "password"), c.Resolve<Formatter>()))
+            builder.Register(c => new IpbMessageGateway(ConfigHelper.GetValueOrDefault(ipbCfg, "origin", "http://ipb.local"), ConfigHelper.GetValueOrDefault(ipbCfg, "user", "nbot"), ConfigHelper.GetValueOrDefault<string>(ipbCfg, "password"), c.Resolve<Formatter>(), GetCapabilities(ipbCapabilitiesCfg)))
                 .As<IMessageGateway>()
                 .SingleInstance();
 
@@ -69,6 +71,21 @@
 
             builder.RegisterType<Subject<MessageUpdate>>()
                 .SingleInstance();
+        }
+
+        private MessageGatewayCapabilities GetCapabilities(IDictionary capabilitiesCfg)
+        {
+            if (capabilitiesCfg != null && capabilitiesCfg.Keys.Count != 0)
+            {
+                var capabilities = capabilitiesCfg.Keys.Cast<string>()
+                    .Select(k => (MessageGatewayCapabilities)Enum.Parse(typeof(MessageGatewayCapabilities), k)).ToArray();
+
+                var result = capabilities.First();
+
+                return capabilities.Aggregate(result, (current, capability) => current | capability);
+            }
+
+            return MessageGatewayCapabilities.GetUpdates | MessageGatewayCapabilities.SendMessage;
         }
     }
 }

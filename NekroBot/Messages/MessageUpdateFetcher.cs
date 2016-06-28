@@ -28,7 +28,7 @@
             {
                 Log.Trace(m => m("Запускается запрос новых сообщений"));
 
-                var updateTasks = this.gateways.Select(
+                var updateTasks = this.gateways.Where(g => g.Capabilities.HasFlag(MessageGatewayCapabilities.GetUpdates)).Select(
                     g => Task.Run(
                         () =>
                             {
