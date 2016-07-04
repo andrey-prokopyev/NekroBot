@@ -8,7 +8,7 @@
     using Common.Logging;
 
     using global::Telegram.Bot;
-    using global::Telegram.Bot.Types;
+    using global::Telegram.Bot.Types.Enums;
 
     using State;
 
@@ -18,7 +18,7 @@
     {
         private static readonly ILog Log = LogManager.GetLogger<TelegramMessageGateway>();
 
-        private readonly Api api;
+        private readonly TelegramBotClient api;
 
         private readonly Formatter formatter;
 
@@ -33,7 +33,7 @@
             this.formatter = formatter;
             Capabilities = capabilities;
             this.state = state;
-            this.api = new Api(apiKey);
+            this.api = new TelegramBotClient(apiKey);
         }
 
         public string Name { get; } = "Telegram";
@@ -42,7 +42,7 @@
 
         public IEnumerable<MessageUpdate> GetMessageUpdates()
         {
-            var telegramUpdates = this.api.GetUpdates(offset).Result;
+            var telegramUpdates = this.api.GetUpdatesAsync(offset).Result;
 
             Log.Trace(m => m($"Получено {telegramUpdates.Length} обновлений"));
 
@@ -71,7 +71,7 @@
                 }
             }
 
-            Log.Trace(m => m($"Из {telegramUpdates.Length} обрабатывается {updates.Length} обновлений"));
+            Log.Trace(m => m($"Из {telegramUpdates.Length} обновлений обрабатывается {updates.Length}"));
 
             if (this.chatId == default(long))
             {
@@ -133,7 +133,7 @@
                 return;
             }
 
-            var response = await this.api.SendTextMessage(this.chatId, text);
+            var response = await this.api.SendTextMessageAsync(this.chatId, text);
 
             Log.Trace(m => m($"Отправлено сообщение {messageUpdate}"));
 
