@@ -258,6 +258,8 @@
                         {
                             Log.Error(m => m("Не найден secure_hash"));
                         }
+
+                        this.UpdateLastChatId(content);
                     }
 
                     if (!string.IsNullOrEmpty(session) && !string.IsNullOrEmpty(secret))
