@@ -30,14 +30,15 @@
 
                         var job = JobBuilder.Create<ReminderActionJob>()
                             .UsingJobData(jobData)
-                            .WithIdentity(scheduledItem.Name, JobGroup).Build();
+                            .WithIdentity(scheduledItem.Name, JobGroup)
+                            .Build();
 
                         var trigger = TriggerBuilder.Create()
                             .WithIdentity(scheduledItem.Name)
                             .StartNow()
-                            .WithCronSchedule(scheduledItem.Schedule.CronExpression)
+                            .WithCronSchedule(scheduledItem.Schedule.CronExpression, b => b.WithMisfireHandlingInstructionDoNothing())
                             .Build();
-
+                        
                         scheduler.ScheduleJob(job, trigger);
                     });
         }
