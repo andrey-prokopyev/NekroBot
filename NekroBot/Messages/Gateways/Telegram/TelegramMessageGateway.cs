@@ -109,10 +109,21 @@
 
         public async Task Send(MessageUpdate messageUpdate)
         {
-            if (this.chatId == default(int))
+            if (this.chatId == default(long))
             {
-                Log.Warn(m => m($"Не установлен идентификатор чата. Сообщение {messageUpdate} проигнорировано"));
-                return;
+                var savedChatId = this.state.GetChat();
+
+                if (savedChatId != default(long))
+                {
+                    this.chatId = savedChatId;
+                    Log.Debug(m => m($"Идентификатор чата {this.chatId} взят из БД"));
+                }
+                else
+                {
+                    Log.Warn(m => m($"Не установлен идентификатор чата. Сообщение {messageUpdate} проигнорировано"));
+                    return;
+                }
+                
             }
 
             var text = this.formatter.Format(messageUpdate);
