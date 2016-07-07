@@ -61,5 +61,13 @@
                 Log.Info("Starting QuartzScheduler.");
             }
         }
+
+        /// <summary>
+        /// Выполняет определяемые приложением задачи, связанные с удалением, высвобождением или сбросом неуправляемых ресурсов.
+        /// </summary>
+        public void Dispose()
+        {
+            this.scheduler.Shutdown(true);
+        }
     }
 }

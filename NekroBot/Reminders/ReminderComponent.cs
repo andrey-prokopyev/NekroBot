@@ -21,5 +21,14 @@
 
             return Task.WhenAll(addTasks);
         }
+
+        public Task Stop()
+        {
+            return Task.Run(
+                () =>
+                    {
+                        this.scheduler.Dispose();
+                    });
+        }
     }
 }

@@ -37,5 +37,10 @@
                         this.messageUpdateObservable.Subscribe(m => this.messageSender.Send(m));
                     });
         }
+
+        public Task Stop()
+        {
+            return Task.Run(() => { messageUpdateObservable.Dispose(); });
+        }
     }
 }

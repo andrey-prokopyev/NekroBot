@@ -2,23 +2,49 @@
 
 namespace NekroBot
 {
-    public partial class NekroService : ServiceBase
+    using System;
+
+    using Common.Logging;
+
+    internal partial class NekroService : ServiceBase
     {
-        private readonly BotStarter starter;
+        private static readonly ILog Log = LogManager.GetLogger<NekroService>();
+
+        private readonly BotController controller;
 
         public NekroService()
         {
-            starter = new BotStarter();
+            this.controller = new BotController();
             InitializeComponent();
         }
 
         protected async override void OnStart(string[] args)
         {
-            await this.starter.Start();
+            try
+            {
+                await this.controller.Start();
+            }
+            catch (Exception e)
+            {
+                Log.Error(m => m("При запуске сервиса произошла ошибка"), e);
+                this.Stop();
+            }
         }
 
-        protected override void OnStop()
+        protected override async void OnStop()
         {
+            try
+            {
+                await this.controller.Stop();
+            }
+            catch (Exception e)
+            {
+                Log.Error(m => m("При остановке сервиса произошла ошибка"), e);
+            }
+            finally
+            {
+                this.Dispose(true);
+            }
         }
     }
 }

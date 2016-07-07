@@ -15,6 +15,7 @@
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<BotRunner>().SingleInstance();
+            builder.RegisterType<BotDisposer>().SingleInstance();
         }
     }
 }

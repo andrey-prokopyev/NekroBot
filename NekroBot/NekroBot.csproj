@@ -128,8 +128,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BotDisposer.cs" />
     <Compile Include="BotRunner.cs" />
-    <Compile Include="BotStarter.cs" />
+    <Compile Include="BotController.cs" />
     <Compile Include="Configuration\ReminderElement.cs" />
     <Compile Include="Configuration\ReminderSection.cs" />
     <Compile Include="Configuration\ReminderSettingsCollection.cs" />
@@ -142,6 +143,7 @@
     <Compile Include="DI\MessageModule.cs" />
     <Compile Include="DI\RemindersModule.cs" />
     <Compile Include="IBotComponent.cs" />
+    <Compile Include="Loop\LoopComponent.cs" />
     <Compile Include="Messages\Formatter.cs" />
     <Compile Include="Messages\Gateways\Ipb\IpbMessageGateway.cs" />
     <Compile Include="Messages\Gateways\Telegram\TelegramMessageGateway.cs" />

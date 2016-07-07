@@ -3,3 +3,12 @@
 ################################################################################
 
 /NekroBot/bin
+/NekroBot/obj
+/.vs/NekroBot/v14
+/NekroBot/StyleCop.Cache
+/NekroBot/Telegram.config
+/NekroBot/IPB.config
+/NekroBot/NekroBot.csproj.user
+/packages
+/NekroBot.sln.DotSettings.user
+/NekroBot/Data/NekroDb_log.ldf

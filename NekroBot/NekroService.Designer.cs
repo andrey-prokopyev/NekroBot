@@ -1,6 +1,6 @@
 ﻿namespace NekroBot
 {
-    partial class NekroService
+    internal partial class NekroService
     {
         /// <summary> 
         /// Required designer variable.

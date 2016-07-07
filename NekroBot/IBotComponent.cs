@@ -5,5 +5,7 @@
     public interface IBotComponent
     {
         Task Run();
+
+        Task Stop();
     }
 }
